@@ -1,0 +1,13 @@
+Name,Description,Icon File,Image File
+Doorway,Doorway,icon.png,photo1.png
+Bathroom,Bathroom,icon.png,photo1.png
+Main Room,Main Room,icon.png,main_room_photo.jpg
+Window,Window,window_icon.png,photo1.png
+Bed,Bed,bed_icon.png,photo1.png
+Desk,Desk,icon.png,photo1.png
+Shower,Shower,shower_icon.png,photo1.png
+Chair,Chair,icon.png,photo1.png
+Corridor,Corridor,icon.png,photo1.png
+Pantry,Pantry,pantry_icon.png,pantry_photo.jpg
+Left Hand,Left Hand,icon.png,photo1.png
+Right Hand,Right Hand,icon.png,photo1.png

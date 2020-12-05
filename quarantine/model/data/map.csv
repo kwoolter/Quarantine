@@ -1,0 +1,10 @@
+Location,VisibleLocations
+Doorway,Main Room
+Bathroom,"Shower,Main Room"
+Main Room,"Doorway,Bathroom,Window,Desk, Bed"
+Window,Main Room
+Bed,Main Room
+Desk,"Main Room, Chair"
+Shower,Bathroom
+Chair,Desk
+Corridor,Doorway

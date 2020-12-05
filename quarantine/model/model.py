@@ -1,5 +1,8 @@
 from quarantine.model.events import Event
 from quarantine.model.qtime import QTimer
+from quarantine.model.qobject import *
+from quarantine.model.qlocation import *
+from quarantine.model.qmap import *
 import collections
 
 class QModel:
@@ -20,12 +23,23 @@ class QModel:
 
         # Model Components
         self.events = EventQueue()
+        self.current_location = None
 
         self.state = QModel.STATE_LOADED
 
     def initialise(self):
         self.state = QModel.STATE_READY
         self.timer = QTimer()
+
+        # Initialise components
+        QLocationFactory.load("locations.csv")
+        QObjectFactory.load("objects.csv")
+        QMapFactory.load("map.csv")
+
+        start_location = "Pantry"
+        start_location = "Main Room"
+
+        self.current_location = QLocationFactory.get_object_by_name(start_location)
 
     def pause(self):
         if self.state == QModel.STATE_PLAYING:
