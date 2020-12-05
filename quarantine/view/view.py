@@ -171,7 +171,7 @@ class QMainFrame(View):
 
         try:
             image = pygame.image.load(filename)
-            image = pygame.transform.scale(image, (32, 32))
+            image = pygame.transform.scale(image, (32,32))
             pygame.display.set_icon(image)
         except Exception as err:
             print(str(err))

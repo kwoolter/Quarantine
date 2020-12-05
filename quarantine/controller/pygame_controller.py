@@ -32,7 +32,7 @@ class QController:
         FPSCLOCK = pygame.time.Clock()
 
         # Model tick timer
-        pygame.time.set_timer(USEREVENT + 1, 15)
+        pygame.time.set_timer(USEREVENT + 1, 1000)
 
         pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP, USEREVENT])
 
@@ -40,16 +40,33 @@ class QController:
 
         while loop is True:
 
-            self.model.tick()
             self.view.draw()
             self.view.update()
+
+            # Loop to process Dark World game events
+            event = self.model.get_next_event()
+            while event is not None:
+
+                try:
+                    self.model.process_event(event)
+                    self.view.process_event(event)
+
+                except Exception as err:
+                    print("Caught exception {0}".format(str(err)))
+
+                if event.type == model.Event.QUIT:
+                    loop = False
+                    break
+
+                event = self.model.get_next_event()
+
 
             # Loop to process pygame events
             for event in pygame.event.get():
 
                 # Timer events for the model to process
                 if event.type == USEREVENT + 1:
-                    pass
+                    self.model.tick()
 
                 # Quit event
                 if event.type == QUIT:
