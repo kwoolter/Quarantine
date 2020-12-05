@@ -8,6 +8,7 @@ class Event():
     GAME = "game"
     WORLD = "world"
     EFFECT = "effect"
+    CONTROL = "control"
 
     # Define states
     STATE_LOADED = "Game Loaded"
@@ -17,10 +18,13 @@ class Event():
     STATE_GAME_OVER = "Game Over"
     STATE_WORLD_COMPLETE = "Game World Complete"
 
-    # Event Names
+    # Game events
+    GAME_NEW_PLAYER = "new player"
+    GAME_SAVED = "game saved"
+    GAME_LOADED = "game loaded"
+    GAME_MODE_CHANGED = "mode changed"
+
     TICK = "Tick"
-    EFFECT_START = "Effect Start"
-    EFFECT_END = "Effect End"
     HELP = "Help"
     ACTION_FAILED = "action failed"
     ACTION_SUCCEEDED = "action succeeded"

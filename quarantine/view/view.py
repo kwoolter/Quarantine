@@ -139,6 +139,12 @@ class View():
 
 
 class QMainFrame(View):
+
+    MODE_READY = "ready"
+    MODE_PLAYING = "playing"
+    MODE_PAUSED = "game paused"
+    MODE_GAME_OVER = "game over"
+
     RESOURCES_DIR = os.path.dirname(__file__) + "\\resources\\"
 
     TRANSPARENT = (0, 255, 0)
@@ -214,4 +220,7 @@ class QMainFrame(View):
     def process_event(self, new_event: model.Event):
 
         super().process_event(new_event)
+
+    def set_mode(self, new_mode: str):
+        self.mode = new_mode
 

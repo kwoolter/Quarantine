@@ -1,29 +1,50 @@
 from quarantine.model.events import Event
+from quarantine.model.qtime import QTimer
 import collections
 
 class QModel:
+
+    # Define states
+    STATE_LOADED = "Game Loaded"
+    STATE_READY = "Game Ready"
+    STATE_PLAYING = "Game Playing"
+    STATE_PAUSED = "Game Paused"
+    STATE_GAME_OVER = "Game Over"
+
     def __init__(self, name : str):
 
         # Model properties
         self.name = name
         self._state = None
-
+        self.timer = None
 
         # Model Components
         self.events = EventQueue()
 
-        self.state = Event.STATE_LOADED
+        self.state = QModel.STATE_LOADED
 
     def initialise(self):
-        self.state = Event.STATE_READY
+        self.state = QModel.STATE_READY
+        self.timer = QTimer()
+
+    def pause(self):
+        if self.state == QModel.STATE_PLAYING:
+            self.state = QModel.STATE_PAUSED
+        elif self.state == QModel.STATE_PAUSED:
+            self.state = QModel.STATE_PLAYING
 
     def end(self):
-        pass
+        self.state = QModel.STATE_GAME_OVER
 
     def tick(self):
-        self.events.add_event(Event(type=Event.GAME,
-                                    name=Event.TICK,
-                                    description=f"Game model ticked state({self.state})"))
+
+        if self.state == QModel.STATE_PLAYING:
+
+            self.timer.tick()
+
+            self.events.add_event(Event(type=Event.GAME,
+                                        name=Event.TICK,
+                                        description=f"Game model ticked: Day {self.timer.day:02} {self.timer.hour:02}:{self.timer.minutes:02} state({self.state})"))
 
     @property
     def state(self):
@@ -38,6 +59,8 @@ class QModel:
                                         name=self.state,
                                         description="Game state changed to {0}".format(self.state)))
 
+    def set_mode(self, new_mode):
+        self.state = new_mode
 
     def get_next_event(self):
         next_event = None
