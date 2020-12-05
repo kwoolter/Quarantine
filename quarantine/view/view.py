@@ -190,6 +190,15 @@ class QMainFrame(View):
         x = 0
         y = 0
 
+        img = View.image_manager.get_image("quarantine.png")
+        self.surface.blit(img, (x, y))
+
+        img = View.image_manager.get_image("photo1.png")
+        img_rect = img.get_rect()
+        img_rect.center = self.surface.get_rect().center
+        self.surface.blit(img, (img_rect.x, img_rect.y))
+
+
     def update(self):
         pygame.display.update()
 
