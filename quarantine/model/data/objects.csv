@@ -1,22 +1,22 @@
 Name,Description,Icon File,Image File,Location,State,IsInteractable,IsMovable,IsContainer,IsStorable
-Door,Door,icon.png,,Doorway,LOCKED,TRUE,FALSE,FALSE,FALSE
 Bedside Table,Bedside Table,icon.png,,Bed,CLOSED,TRUE,FALSE,TRUE,FALSE
-Wardrobe,Wardrobe,icon.png,wardrobe_photo.jpg,Main Room,CLOSED,TRUE,FALSE,TRUE,FALSE
-Single Bed,Single Bed,icon.png,,Bed,CLOSED,TRUE,FALSE,TRUE,FALSE
-Kettle,Kettle,icon.png,,Pantry,OFF,TRUE,TRUE,TRUE,FALSE
-TV,TV,icon.png,,Main Room,OFF,TRUE,FALSE,FALSE,FALSE
-Fridge,Fridge,icon.png,,Pantry,CLOSED,TRUE,FALSE,TRUE,FALSE
-Sink,Sink,icon.png,,Bathroom,OFF,TRUE,FALSE,FALSE,FALSE
-Toilet,Toilet,icon.png,,Bathroom,OFF,TRUE,FALSE,FALSE,FALSE
-Curtains,Curtains,icon.png,,Window,OPEN,TRUE,FALSE,FALSE,FALSE
-Beer,Beer,icon.png,,Fridge,FULL,TRUE,TRUE,FALSE,TRUE
-Milk Carton,Milk Carton,icon.png,,Fridge,CLOSED,TRUE,TRUE,FALSE,TRUE
-Pillow,Pillow,icon.png,,Single Bed,NONE,TRUE,TRUE,FALSE,FALSE
-Soap,Soap,icon.png,,Sink,NONE,TRUE,TRUE,FALSE,FALSE
-Shampoo,Shampoo,icon.png,,Shower,FULL,TRUE,TRUE,TRUE,TRUE
-T-shirt,T-shirt,icon.png,,Wardrobe,NONE,TRUE,TRUE,FALSE,TRUE
+Beer,Beer,beer_icon.png,,Fridge,FULL,TRUE,TRUE,FALSE,TRUE
+Coffee,Coffee,coffee_icon.png,,Pantry,FULL,TRUE,TRUE,FALSE,TRUE
+Coffee Machine,Coffee Machine,coffee_machine_icon.png,,Pantry,OFF,TRUE,FALSE,TRUE,FALSE
 Crisps,Crisps,icon.png,,Pantry,FULL,TRUE,TRUE,FALSE,TRUE
-Red Wine,Red Wine,icon.png,,Pantry,FULL,TRUE,TRUE,FALSE,TRUE
+Curtains,Curtains,curtains_icon.png,,Window,OPEN,TRUE,FALSE,FALSE,FALSE
+Door,Door,door_icon.png,,Doorway,LOCKED,TRUE,FALSE,FALSE,FALSE
+Fridge,Fridge,fridge_icon.png,,Pantry,CLOSED,TRUE,FALSE,TRUE,FALSE
+Kettle,Kettle,kettle_icon.png,,Pantry,OFF,TRUE,TRUE,TRUE,FALSE
+Milk Carton,Milk Carton,milk_icon.png,,Fridge,CLOSED,TRUE,TRUE,FALSE,TRUE
 Nuts,Nuts,icon.png,,Pantry,FULL,TRUE,TRUE,FALSE,TRUE
-Coffee,Coffee,icon.png,,Pantry,FULL,TRUE,TRUE,FALSE,TRUE
-Coffee Machine,Coffee Machine,icon.png,,Pantry,OFF,TRUE,FALSE,TRUE,FALSE
+Pillow,Pillow,icon.png,,Single Bed,NONE,TRUE,TRUE,FALSE,FALSE
+Red Wine,Red Wine,red_wine_icon.png,,Pantry,FULL,TRUE,TRUE,FALSE,TRUE
+Shampoo,Shampoo,shampoo_icon.png,,Shower,FULL,TRUE,TRUE,TRUE,TRUE
+Single Bed,Single Bed,bed_icon.png,,Bed,CLOSED,TRUE,FALSE,TRUE,FALSE
+Sink,Sink,bathroom_sink_icon.png,,Bathroom,OFF,TRUE,FALSE,FALSE,FALSE
+Soap,Soap,soap_icon.png,,Sink,NONE,TRUE,TRUE,FALSE,FALSE
+Toilet,Toilet,toilet_icon.png,,Bathroom,OFF,TRUE,FALSE,FALSE,FALSE
+T-shirt,T-shirt,icon.png,,Wardrobe,NONE,TRUE,TRUE,FALSE,TRUE
+TV,TV,tv_icon.png,,Main Room,OFF,TRUE,FALSE,FALSE,FALSE
+Wardrobe,Wardrobe,icon.png,wardrobe_photo.jpg,Main Room,CLOSED,TRUE,FALSE,TRUE,FALSE

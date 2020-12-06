@@ -147,7 +147,7 @@ class ObjectsView(View):
         return self.objects[self.object_selection]
 
     def draw(self):
-        self.surface.fill(Colours.GREEN)
+        self.surface.fill(Colours.WHITE)
         pane_rect = self.surface.get_rect()
 
         x = pane_rect.centerx
@@ -181,7 +181,8 @@ class ObjectsView(View):
                       msg=f"{i + 1}){o.name}",
                       x=icon_rect.centerx,
                       y=icon_rect.bottom + 10,
-                      bg_colour=Colours.BLUE,
+                      bg_colour=Colours.WHITE,
+                      fg_colour=Colours.BLUE,
                       size=text_size)
 
             x += icon_size + 10
