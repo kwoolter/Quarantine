@@ -112,10 +112,18 @@ class QController:
             action = self.process_playing_events(new_event)
 
             # Game playing actions
+            select = action.get('select')
             pause = action.get('pause')
+            number_selection = action.get("select_number")
 
-            if pause:
+            if select:
+                new_loc = self.view.location_view.get_selected_new_location()
+                self.model.current_location = new_loc
+                self.view.location_view.initialise()
+            elif pause:
                 self.set_mode(QController.GAME_MODE_PAUSED)
+            elif number_selection:
+                self.view.location_view.set_next_location(number_selection)
         
         elif self.mode == QController.GAME_MODE_PAUSED:
             action = self.process_paused_events(new_event)
@@ -133,6 +141,11 @@ class QController:
         if new_event.type == KEYUP:
             if new_event.key == K_SPACE:
                 action = {"pause":True}
+            elif new_event.key == K_RETURN:
+                action = {"select":True}
+            elif new_event.key >= K_1 and new_event.key <= K_9:
+                action = {"select_number":new_event.key - K_1 + 1}
+
 
         return action
 
@@ -142,6 +155,11 @@ class QController:
         if new_event.type == KEYUP:
             if new_event.key == K_SPACE:
                 action = {"pause":True}
+            elif new_event.key == K_RETURN:
+                action = {"select":True}
+            elif new_event.key >= K_1 and new_event.key <= K_9:
+                action = {"select_number":new_event.key - K_1 + 1}
+
 
         return action
 

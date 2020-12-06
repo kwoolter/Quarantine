@@ -1,10 +1,11 @@
 Location,VisibleLocations
 Doorway,Main Room
 Bathroom,"Shower,Main Room"
-Main Room,"Doorway,Bathroom,Window,Desk, Bed"
+Main Room,"Doorway,Bathroom,Window,Desk, Bed, Pantry"
 Window,Main Room
-Bed,Main Room
+Bed,"Main Room, Window"
 Desk,"Main Room, Chair"
 Shower,Bathroom
 Chair,Desk
 Corridor,Doorway
+Pantry,Main Room

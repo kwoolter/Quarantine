@@ -41,7 +41,7 @@ class QMainFrame(View):
 
         super().initialise()
 
-        self.location_view.initialise(self.model)
+        self.location_view.initialise()
 
         os.environ["SDL_VIDEO_CENTERED"] = "1"
         pygame.init()
