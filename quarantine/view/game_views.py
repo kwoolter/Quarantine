@@ -50,14 +50,15 @@ class LocationView(View):
     def get_selected_new_location(self):
         return self.next_locations[self.next_location_selection]
 
+    def set_selected_object(self, new_object_id: int, increment: bool = False):
+        self.objects_view.set_selected_object(new_object_id, increment)
+
     def draw(self):
         self.surface.fill(Colours.BLUE)
         pane_rect = self.surface.get_rect()
 
-
         self.surface.blit(self.photo_img, (0, 0))
-
-        self.surface.blit(self.icon_img, (10,10))
+        self.surface.blit(self.icon_img, (4,4))
 
         location = self.model.current_location
 
@@ -154,7 +155,7 @@ class ObjectsView(View):
 
         draw_text(self.surface,
                   msg="Objects",
-                  size=40,
+                  size=30,
                   x=x,
                   y=y)
 

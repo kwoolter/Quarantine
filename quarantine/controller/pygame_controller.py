@@ -115,6 +115,7 @@ class QController:
             select = action.get('select')
             pause = action.get('pause')
             number_selection = action.get("select_number")
+            f_number_selection = action.get("select_F_number")
 
             if select:
                 new_loc = self.view.location_view.get_selected_new_location()
@@ -124,6 +125,8 @@ class QController:
                 self.set_mode(QController.GAME_MODE_PAUSED)
             elif number_selection:
                 self.view.location_view.set_next_location(number_selection)
+            elif f_number_selection:
+                self.view.location_view.set_selected_object(f_number_selection)
         
         elif self.mode == QController.GAME_MODE_PAUSED:
             action = self.process_paused_events(new_event)
@@ -145,6 +148,8 @@ class QController:
                 action = {"select":True}
             elif new_event.key >= K_1 and new_event.key <= K_9:
                 action = {"select_number":new_event.key - K_1 + 1}
+            elif new_event.key >= K_F1 and new_event.key <= K_F12:
+                action = {"select_F_number":new_event.key - K_F1 + 1}
 
 
         return action
@@ -159,7 +164,8 @@ class QController:
                 action = {"select":True}
             elif new_event.key >= K_1 and new_event.key <= K_9:
                 action = {"select_number":new_event.key - K_1 + 1}
-
+            elif new_event.key >= K_F1 and new_event.key <= K_F12:
+                action = {"select_F_number":new_event.key - K_F1 + 1}
 
         return action
 
