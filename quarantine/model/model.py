@@ -87,6 +87,10 @@ class QModel:
         print("Default Game event process:{0}".format(new_event))
 
 
+    def get_objects_at_location(self):
+        return QObjectFactory.get_objects_by_location(self.current_location.name)
+
+
 class EventQueue():
     def __init__(self):
         self.events = collections.deque()

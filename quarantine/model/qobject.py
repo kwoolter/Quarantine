@@ -64,18 +64,13 @@ class QObjectFactory():
 
     @staticmethod
     def get_available_objects()->list:
-        return list(QObjectFactory.races.index)
+        return list(QObjectFactory.qobjects.keys())
 
     @staticmethod
     def get_object_by_name(name: str) -> QObject:
-        objects = QObjectFactory.objects
-        e = None
-        if name in list(objects.index):
-            row = objects.loc[name]
-            e = QObject(name)
-            e.add_properties(row.iloc[:].to_dict())
 
-        else:
+        e = QObjectFactory.qobjects.get(name)
+        if e is None:
             logging.warning(f"Can't find QObject {name} in factory!")
 
         return e
@@ -100,3 +95,10 @@ if __name__ == "__main__":
     for name in names:
         r = QObjectFactory.get_object_by_name(name)
         print(f"\t{r}")
+
+    loc_name = "Pantry"
+    print(f"\n\nLooking for objects at {loc_name}")
+
+    matches = QObjectFactory.get_objects_by_location(loc_name)
+    for o in matches:
+        print(f"\t{o}")
