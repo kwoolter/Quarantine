@@ -1,13 +1,15 @@
 Name,Description,Icon File,Image File
-Doorway,Doorway,door_icon.png,doorway_photo.jpg
+Doorway,Doorway,door_icon.png,"doorway_photo1.jpg, doorway_photo2.jpg"
 Bathroom,Bathroom,bathroom_icon.png,bathroom_photo.jpg
-Main Room,Main Room,main_room_icon.png,main_room_photo.jpg
-Window,Window,window_icon.png,main_room_photo.jpg
-Bed,Bed,bed_icon.png,bed_photo.jpg
+Main Room,Main Room,main_room_icon.png,"main_room_photo1.jpg, main_room_photo2.jpg, main_room_photo3.jpg, doorway_photo1.jpg,  pantry_photo.jpg,beds_photo1.jpg"
+Window,Window,window_icon.png,window_photo.jpg
+Bed,Bed,bed_icon.png,beds_photo1.jpg
 Desk,Desk,desk_icon.png,desk_photo.jpg
 Shower,Shower,shower_icon.png,shower_photo.jpg
-Chair,Chair,chair_icon.png,desk_chair_photo.jpg
+Desk Chair,Desk Chair,chair_icon.png,desk_photo.jpg
 Corridor,Corridor,icon.png,photo1.png
 Pantry,Pantry,pantry_icon.png,pantry_photo.jpg
-Left Hand,Left Hand,left_hand_icon.png,photo1.png
-Right Hand,Right Hand,right_hand_icon.png,photo1.png
+Left Hand,Left Hand,left_hand_icon.png,left_hand_photo.png
+Right Hand,Right Hand,right_hand_icon.png,right_hand_photo.png
+Snug,Snug,icon.png,snug_photo1.png
+TV Area,TV Area,icon.png,main_room_photo3.jpg

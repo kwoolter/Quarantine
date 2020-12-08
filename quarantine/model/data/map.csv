@@ -4,8 +4,12 @@ Bathroom,"Shower,Main Room"
 Main Room,"Doorway,Bathroom,Window,Desk, Bed, Pantry"
 Window,Main Room
 Bed,"Main Room, Window"
-Desk,"Main Room, Chair"
+Desk,"Main Room, Desk Chair"
 Shower,Bathroom
-Chair,Desk
+Desk Chair,Desk
 Corridor,Doorway
 Pantry,Main Room
+Window,Snug
+Snug,Window
+TV Area,Main Room
+Main Room,TV Area

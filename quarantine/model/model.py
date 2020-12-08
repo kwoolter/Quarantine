@@ -3,6 +3,9 @@ from quarantine.model.qtime import QTimer
 from quarantine.model.qobject import *
 from quarantine.model.qlocation import *
 from quarantine.model.qmap import *
+from quarantine.model.qpuzzles import *
+from quarantine.model.game_qpuzzles import *
+from quarantine.model.qplayer import *
 import collections
 
 class QModel:
@@ -22,8 +25,10 @@ class QModel:
         self.timer = None
 
         # Model Components
+        self.player = None
         self.events = EventQueue()
         self.current_location = None
+        self.puzzles = QGamePuzzleManager()
 
         self.state = QModel.STATE_LOADED
 
@@ -32,6 +37,10 @@ class QModel:
         self.timer = QTimer()
 
         # Initialise components
+        self.player = QPlayer("Me")
+        self.player.roll()
+        print(f"{self.player}")
+
         QLocationFactory.load("locations.csv")
         QObjectFactory.load("objects.csv")
         QMapFactory.load("map.csv")
@@ -40,6 +49,10 @@ class QModel:
         start_location = "Main Room"
 
         self.current_location = QLocationFactory.get_object_by_name(start_location)
+
+        self.events.add_event(Event(type=Event.GAME,
+                                    name=Event.ACTION_SUCCEEDED,
+                                    description=f"Welcome {self.player.name} to {self.name}"))
 
     def pause(self):
         if self.state == QModel.STATE_PLAYING:
@@ -89,6 +102,32 @@ class QModel:
 
     def get_objects_at_location(self):
         return QObjectFactory.get_objects_by_location(self.current_location.name)
+
+    def perform_action(self, obj:str, action:str):
+
+        inputs = {}
+
+        inputs[QPuzzle.INPUT_LOCATION] = self.current_location.name
+        inputs[QPuzzle.INPUT_TIME] = str(self.timer)
+        inputs[QPuzzle.INPUT_PLATER_STATE] = self.player.state
+        inputs[QPuzzle.INPUT_OBJECT] = obj
+        inputs[QPuzzle.INPUT_ACTION] = action
+
+        self.events.add_event(Event(type=Event.GAME,
+                                    name=Event.ACTION_SUCCEEDED,
+                                    description=f"Trying to {action} {obj}"))
+
+        success = self.puzzles.evaluate_puzzles(inputs)
+
+        if success is False:
+            self.events.add_event(Event(type=Event.GAME,
+                                        name=Event.ACTION_FAILED,
+                                        description=f"Nothing happens when you {action} {obj}"))
+        else:
+            for puzzle, output in self.puzzles.outputs.items():
+                print(f"{puzzle}:{output}")
+
+        return success
 
 
 class EventQueue():

@@ -8,31 +8,52 @@ class LocationView(View):
 
         super().__init__()
 
+        # Properties
         self.model = model
         self.width = width
         self.height = height
 
+        # Components
         self.next_location_selection = 0
         self.next_locations = []
+        self.location_images = []
 
         self.objects_view = ObjectsView(self.model, self.width, 100)
 
 
     def initialise(self):
+
         super().initialise()
 
         self.surface = pygame.Surface((self.width, self.height))
 
         icon_file = self.model.current_location.get_property("Icon File")
-        image_file = self.model.current_location.get_property("Image File")
-
         self.icon_img = View.image_manager.get_image(icon_file, width=64, height=64)
-        self.photo_img = View.image_manager.get_image(image_file, width=self.width, height=self.height)
+
+        image_files = self.model.current_location.get_property("Image File")
+        self.location_images = []
+        for file_name in image_files.split(","):
+            photo_img = View.image_manager.get_image(file_name.strip(), width=self.width, height=self.height)
+            self.location_images.append(photo_img)
+
+        self.set_location_image(0)
 
         self.next_locations = sorted(list(self.model.current_location.linked_locations.values()), key=lambda k:k.name )
         self.set_next_location(0)
 
         self.objects_view.initialise()
+
+    def set_location_image(self, image_number : int, increment : bool = False, wrap: bool = True):
+
+        if increment is True:
+            image_number = self.location_image_selection + image_number
+            if wrap is True:
+                if image_number >= len(self.location_images):
+                    image_number = 0
+                elif image_number < 0:
+                    image_number = len(self.location_images) - 1
+
+        self.location_image_selection = max(0, min(len(self.location_images) - 1, image_number))
 
     def set_next_location(self, new_location_id : int, increment:bool = False):
 
@@ -53,11 +74,16 @@ class LocationView(View):
     def set_selected_object(self, new_object_id: int, increment: bool = False):
         self.objects_view.set_selected_object(new_object_id, increment)
 
+    def get_selected_object(self):
+        return self.objects_view.get_selected_object()
+
     def draw(self):
         self.surface.fill(Colours.BLUE)
         pane_rect = self.surface.get_rect()
 
-        self.surface.blit(self.photo_img, (0, 0))
+        photo_img = self.location_images[self.location_image_selection]
+
+        self.surface.blit(photo_img, (0, 0))
         self.surface.blit(self.icon_img, (4,4))
 
         location = self.model.current_location

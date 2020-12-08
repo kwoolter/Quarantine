@@ -18,5 +18,9 @@ Sink,Sink,bathroom_sink_icon.png,,Bathroom,OFF,TRUE,FALSE,FALSE,FALSE
 Soap,Soap,soap_icon.png,,Sink,NONE,TRUE,TRUE,FALSE,FALSE
 Toilet,Toilet,toilet_icon.png,,Bathroom,OFF,TRUE,FALSE,FALSE,FALSE
 T-shirt,T-shirt,icon.png,,Wardrobe,NONE,TRUE,TRUE,FALSE,TRUE
-TV,TV,tv_icon.png,,Main Room,OFF,TRUE,FALSE,FALSE,FALSE
+TV,TV,tv_icon.png,,TV Area,OFF,TRUE,FALSE,FALSE,FALSE
 Wardrobe,Wardrobe,icon.png,wardrobe_photo.jpg,Main Room,CLOSED,TRUE,FALSE,TRUE,FALSE
+Exercise Bike,Exercise Bike,icon.png,,Window,OFF,TRUE,FALSE,FALSE,FALSE
+Telephone,Telephone,icon.png,,Bedside Table,OFF,TRUE,FALSE,FALSE,FALSE
+Playstation 4,Playstation 4,icon.png,,TV Area,OFF,TRUE,FALSE,FALSE,FALSE
+Shelves,Shelves,icon.png,,Desk,OFF,FALSE,FALSE,TRUE,FALSE

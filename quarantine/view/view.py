@@ -26,10 +26,9 @@ class QMainFrame(View):
 
         self.model = model
         self.surface = None
-        self.width = 600
-        self.height = 600
+        self.width = 800
+        self.height = 800
         self._debug = False
-
 
         # Components
         self.location_view = LocationView(model, width=self.width,height=self.height)
