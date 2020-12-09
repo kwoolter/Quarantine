@@ -14,7 +14,10 @@ class QObject():
     def get_property(self, property_name : str):
         return self.properties.get(property_name)
     
-    def set_property(self, property_name:str, property_value):
+    def set_property(self, property_name:str, property_value, increment:bool = False):
+        if increment is True:
+            property_value += self.properties[property_name]
+
         self.properties[property_name] = property_value
 
     def add_content(self, new_object):

@@ -32,7 +32,11 @@ class QPlayer:
     def get_property(self, property_name: str):
         return self.properties.get(property_name)
 
-    def set_property(self, property_name: str, property_value):
+    def set_property(self, property_name: str, property_value, increment:bool = False):
+
+        if increment is True:
+            property_value += self.get_property(property_name)
+
         property_value = max(0,min(100, property_value))
         self.properties[property_name] = property_value
 

@@ -1,10 +1,10 @@
-from quarantine.model import QModel
+import quarantine.model as model
 from .graphics import *
 
 
 class LocationView(View):
 
-    def __init__(self, model: QModel, width:int =0, height=0):
+    def __init__(self, model: model.QModel, width:int =0, height=0):
 
         super().__init__()
 
@@ -42,6 +42,9 @@ class LocationView(View):
         self.set_next_location(0)
 
         self.objects_view.initialise()
+
+    def process_event(self, new_event: model.Event):
+        self.objects_view.process_event(new_event)
 
     def set_location_image(self, image_number : int, increment : bool = False, wrap: bool = True):
 
@@ -140,7 +143,7 @@ class LocationView(View):
 
 class ObjectsView(View):
 
-    def __init__(self, model: QModel, width: int = 0, height=0):
+    def __init__(self, model: model.QModel, width: int = 0, height=0):
 
         super().__init__()
 
@@ -167,6 +170,10 @@ class ObjectsView(View):
         new_object_id -= 1
 
         self.object_selection = max(0, min(new_object_id, len(self.objects) - 1))
+
+    def process_event(self, new_event: model.Event):
+        if new_event.name == model.Event.GAME_MODEL_CHANGED:
+            self.initialise()
 
 
     def get_selected_object(self):
@@ -212,4 +219,47 @@ class ObjectsView(View):
                       size=text_size)
 
             x += icon_size + 10
+
+class PlayerView(View):
+
+    def __init__(self, model: model.QPlayer, width: int = 0, height=0):
+
+        super().__init__()
+
+        self.model = model
+        self.width = width
+        self.height = height
+
+
+    def initialise(self):
+        super().initialise()
+
+        self.surface = pygame.Surface((self.width, self.height))
+
+    def process_event(self, new_event: model.Event):
+        pass
+
+    def draw(self):
+        self.surface.fill(Colours.BLACK)
+        pane_rect = self.surface.get_rect()
+
+        x = pane_rect.centerx
+        y = 18
+
+        draw_text(self.surface,
+                  msg=f"Player {self.model.name}",
+                  size=30,
+                  x=x,
+                  y=y)
+
+        x = pane_rect.centerx
+        y+= 30
+
+        for property, val in self.model.properties.items():
+            draw_text(self.surface,
+                      msg=f"{property} : {val}",
+                      size=24,
+                      x=x,
+                      y=y)
+            y+=20
 

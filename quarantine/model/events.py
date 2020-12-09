@@ -23,6 +23,7 @@ class Event():
     GAME_SAVED = "game saved"
     GAME_LOADED = "game loaded"
     GAME_MODE_CHANGED = "mode changed"
+    GAME_MODEL_CHANGED = "model changed"
 
     TICK = "Tick"
     HELP = "Help"

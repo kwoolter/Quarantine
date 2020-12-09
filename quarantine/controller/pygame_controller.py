@@ -12,6 +12,7 @@ class QController:
     GAME_MODE_START = "start"
     GAME_MODE_INVENTORY = "inventory"
     GAME_MODE_PLAYING = "playing"
+    GAME_MODE_PLAYER = "player"
     GAME_MODE_PAUSED = "paused"
     GAME_MODE_GAME_OVER = "game over"
 
@@ -30,9 +31,9 @@ class QController:
     def initialise(self):
         view.View.image_manager.initialise()
         self.model = model.QModel("Quarantine")
-        self.view = view.QMainFrame(self.model)
-
         self.model.initialise()
+
+        self.view = view.QMainFrame(self.model)
         self.view.initialise()
 
         self.events = self.model.events
@@ -118,6 +119,9 @@ class QController:
             f_number_selection = action.get("select_F_number")
             view_selection = action.get("view selection")
             object_action = action.get("action")
+            debug = action.get("debug")
+            new_mode = action.get("new mode")
+
 
             if select:
                 new_loc = self.view.location_view.get_selected_new_location()
@@ -134,6 +138,10 @@ class QController:
                 self.view.location_view.set_selected_object(f_number_selection)
             elif view_selection:
                 self.view.location_view.set_location_image(view_selection, increment=True)
+            elif new_mode:
+                self.set_mode(new_mode)
+            elif debug:
+                self.model.print()
         
         elif self.mode == QController.GAME_MODE_PAUSED:
             action = self.process_paused_events(new_event)
@@ -144,6 +152,11 @@ class QController:
             if pause:
                 self.set_mode(QController.GAME_MODE_PLAYING)
 
+        elif self.mode == QController.GAME_MODE_PLAYER:
+            action = self.process_player_events(new_event)
+            new_mode = action.get("new mode")
+            if new_mode:
+                self.set_mode(new_mode)
 
     def process_start_events(self, new_event):
         action = {}
@@ -173,12 +186,17 @@ class QController:
                 action = {"select":True}
             elif new_event.key >= K_1 and new_event.key <= K_9:
                 action = {"select_number":new_event.key - K_1 + 1}
-            elif new_event.key >= K_F1 and new_event.key <= K_F12:
+            elif new_event.key >= K_F1 and new_event.key <= K_F11:
                 action = {"select_F_number":new_event.key - K_F1 + 1}
             elif new_event.key == K_LEFT:
                 action = {"view selection": -1}
             elif new_event.key == K_RIGHT:
                 action = {"view selection": 1}
+            elif new_event.key == K_F12:
+                action = {"debug": True}
+            elif new_event.key == K_c:
+                action = {"new mode": QController.GAME_MODE_PLAYER}
+
 
         return action
 
@@ -188,6 +206,15 @@ class QController:
         if new_event.type == KEYUP:
             if new_event.key == K_SPACE:
                 action = {"pause": True}
+        return action
+
+    def process_player_events(self, new_event):
+        action = {}
+        # Key UP events - less time critical actions
+        if new_event.type == KEYUP:
+            if new_event.key == K_c:
+                action = {"new mode": QController.GAME_MODE_PLAYING}
+
         return action
 
     def set_mode(self, new_mode):
@@ -204,6 +231,10 @@ class QController:
             elif new_mode == QController.GAME_MODE_PLAYING:
                 self.view.set_mode(view.QMainFrame.MODE_PLAYING)
                 self.model.set_mode(model.QModel.STATE_PLAYING)
+
+            elif new_mode == QController.GAME_MODE_PLAYER:
+                self.view.set_mode(view.QMainFrame.MODE_PLAYER)
+                self.model.set_mode(model.QModel.STATE_PAUSED)
 
             elif new_mode == QController.GAME_MODE_PAUSED:
                 self.view.set_mode(view.QMainFrame.MODE_PAUSED)

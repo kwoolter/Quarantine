@@ -77,17 +77,25 @@ class QGamePuzzleManager(QPuzzleManager):
 
         puzzle_name = "Take Shower"
         if loc == "Shower" and o == "Shampoo" and action == QPuzzle.ACTION_USE:
-            outputs = {QPlayer.PROPERTY_TIREDNESS: -10, QPlayer.PROPERTY_ENERGY: 10}
+            outputs = {QPlayer.PROPERTY_TIREDNESS: -10, QPlayer.PROPERTY_ENERGY: 10,
+                       QPuzzle.OUTPUT_TIME_DELTA:30,
+                       QPuzzle.OUTPUT_OBJECT: o,
+                       QPuzzle.OUTPUT_OBJECT_PROPERTY: "Location",
+                       QPuzzle.OUTPUT_OBJECT_PROPERTY_VALUE: "VOID"
+                       }
             overall_success = True
             self.outputs[puzzle_name]=outputs
             print(f"Puzzle {puzzle_name} succeeded")
 
         puzzle_name = "Drink Coffee"
         if o == "Coffee" and action == QPuzzle.ACTION_USE:
-            outputs = {QPlayer.PROPERTY_TIREDNESS: -10}
+            outputs = {QPlayer.PROPERTY_TIREDNESS: -10,
+                       QPuzzle.OUTPUT_TIME_DELTA: 15,
+                       QPuzzle.OUTPUT_OBJECT:o,
+                       QPuzzle.OUTPUT_OBJECT_PROPERTY:"Location",
+                       QPuzzle.OUTPUT_OBJECT_PROPERTY_VALUE:"VOID"}
             overall_success = True
             self.outputs[puzzle_name] = outputs
             print(f"Puzzle {puzzle_name} succeeded")
-
 
         return overall_success

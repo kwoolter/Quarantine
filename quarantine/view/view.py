@@ -11,6 +11,7 @@ class QMainFrame(View):
 
     MODE_READY = "ready"
     MODE_PLAYING = "playing"
+    MODE_PLAYER = "player"
     MODE_PAUSED = "game paused"
     MODE_GAME_OVER = "game over"
 
@@ -32,6 +33,7 @@ class QMainFrame(View):
 
         # Components
         self.location_view = LocationView(model, width=self.width,height=self.height)
+        self.player_view = PlayerView(model.player, width=self.width,height=self.height)
 
         self.set_mode(QMainFrame.MODE_READY)
 
@@ -41,6 +43,7 @@ class QMainFrame(View):
         super().initialise()
 
         self.location_view.initialise()
+        self.player_view.initialise()
 
         os.environ["SDL_VIDEO_CENTERED"] = "1"
         pygame.init()
@@ -59,7 +62,7 @@ class QMainFrame(View):
 
     def print(self):
 
-        print("Printing Dark Work view...")
+        print("Printing Quarantine view...")
 
     def draw(self):
         
@@ -75,8 +78,11 @@ class QMainFrame(View):
             self.location_view.draw()
             self.surface.blit(self.location_view.surface, (0,0))
 
-        else:
+        elif self.mode == QMainFrame.MODE_PLAYER:
+            self.player_view.draw()
+            self.surface.blit(self.player_view.surface, (0,0))
 
+        else:
             x = pane_rect.centerx
             y = pane_rect.centery
             draw_text(self.surface,
@@ -96,9 +102,8 @@ class QMainFrame(View):
     def tick(self):
         super().tick()
 
-
     def process_event(self, new_event: model.Event):
-        pass
+        self.location_view.process_event(new_event)
 
     def set_mode(self, new_mode: str):
         self.mode = new_mode

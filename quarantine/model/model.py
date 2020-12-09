@@ -32,6 +32,10 @@ class QModel:
 
         self.state = QModel.STATE_LOADED
 
+    def print(self):
+        print(f"Game:{self.name}")
+        print(f"Player:{self.player}")
+
     def initialise(self):
         self.state = QModel.STATE_READY
         self.timer = QTimer()
@@ -113,10 +117,6 @@ class QModel:
         inputs[QPuzzle.INPUT_OBJECT] = obj
         inputs[QPuzzle.INPUT_ACTION] = action
 
-        self.events.add_event(Event(type=Event.GAME,
-                                    name=Event.ACTION_SUCCEEDED,
-                                    description=f"Trying to {action} {obj}"))
-
         success = self.puzzles.evaluate_puzzles(inputs)
 
         if success is False:
@@ -126,6 +126,26 @@ class QModel:
         else:
             for puzzle, output in self.puzzles.outputs.items():
                 print(f"{puzzle}:{output}")
+                for k,v in output.items():
+                    if k in QPlayer.PROPERTIES:
+                        self.player.set_property(k, v, increment=True)
+
+                    elif k == QPuzzle.OUTPUT_TIME_DELTA:
+                        self.timer.tick(v)
+
+                    elif k == QPuzzle.OUTPUT_OBJECT:
+                        object_property = output.get(QPuzzle.OUTPUT_OBJECT_PROPERTY)
+                        object_property_delta = output.get(QPuzzle.OUTPUT_OBJECT_PROPERTY_DELTA)
+                        object_property_value = output.get(QPuzzle.OUTPUT_OBJECT_PROPERTY_VALUE)
+                        selected_object = QObjectFactory.get_object_by_name(v)
+                        if object_property_delta is not None:
+                            selected_object.set_property(object_property, object_property_delta, increment=False)
+                        else:
+                            selected_object.set_property(object_property, object_property_value)
+
+            self.events.add_event(Event(type=Event.GAME,
+                                        name=Event.GAME_MODEL_CHANGED,
+                                        description=f"Something happened when you {action} {obj}"))
 
         return success
 
