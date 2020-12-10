@@ -128,8 +128,25 @@ class QController:
                 self.model.current_location = new_loc
                 self.view.location_view.initialise()
             elif object_action:
-                obj = self.view.location_view.get_selected_object()
-                self.model.perform_action(obj.name, object_action)
+
+                obj = None
+
+                if object_action == "USE":
+                    obj = self.view.location_view.get_selected_object()
+                elif object_action == "USE LEFT":
+                    objs = self.model.get_objects_at_location("Left Hand")
+                    if len(objs) >= 1:
+                        obj = objs[0]
+                        object_action = "USE"
+                elif object_action == "USE RIGHT":
+                    objs = self.model.get_objects_at_location("Right Hand")
+                    if len(objs) >= 1:
+                        obj = objs[0]
+                        object_action = "USE"
+
+                if obj is not None:
+                    self.model.perform_action(obj.name, object_action)
+
             elif pause:
                 self.set_mode(QController.GAME_MODE_PAUSED)
             elif number_selection:
@@ -182,6 +199,10 @@ class QController:
                 action = {"pause":True}
             elif new_event.key == K_SPACE:
                 action = {"action":"USE"}
+            elif new_event.key == K_LSHIFT:
+                action = {"action":"USE LEFT"}
+            elif new_event.key == K_RSHIFT:
+                action = {"action":"USE RIGHT"}
             elif new_event.key == K_RETURN:
                 action = {"select":True}
             elif new_event.key >= K_1 and new_event.key <= K_9:

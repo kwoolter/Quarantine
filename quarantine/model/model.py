@@ -72,6 +72,7 @@ class QModel:
         if self.state == QModel.STATE_PLAYING:
 
             self.timer.tick()
+            self.player.tick()
 
             self.events.add_event(Event(type=Event.GAME,
                                         name=Event.TICK,
@@ -104,8 +105,11 @@ class QModel:
         print("Default Game event process:{0}".format(new_event))
 
 
-    def get_objects_at_location(self):
-        return QObjectFactory.get_objects_by_location(self.current_location.name)
+    def get_objects_at_location(self, location_name:str = None):
+        if location_name is None:
+            location_name = self.current_location.name
+
+        return QObjectFactory.get_objects_by_location(location_name)
 
     def perform_action(self, obj:str, action:str):
 

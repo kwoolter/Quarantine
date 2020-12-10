@@ -19,6 +19,8 @@ class QMainFrame(View):
 
     TRANSPARENT = (0, 255, 0)
 
+    INVENTORY_SIZE = (140,140)
+
     def __init__(self, model: model.QModel):
 
         super().__init__()
@@ -35,6 +37,10 @@ class QMainFrame(View):
         self.location_view = LocationView(model, width=self.width,height=self.height)
         self.player_view = PlayerView(model.player, width=self.width,height=self.height)
 
+        inv_w, inv_h = QMainFrame.INVENTORY_SIZE
+        self.left_hand_view = ObjectsView("Left Hand", width=inv_w, height=inv_h)
+        self.right_hand_view = ObjectsView("Right Hand", width=inv_w, height=inv_h)
+
         self.set_mode(QMainFrame.MODE_READY)
 
 
@@ -44,6 +50,13 @@ class QMainFrame(View):
 
         self.location_view.initialise()
         self.player_view.initialise()
+
+        left_hand_objects = self.model.get_objects_at_location("Left Hand")
+        self.left_hand_view.initialise(left_hand_objects)
+
+        right_hand_objects = self.model.get_objects_at_location("Right Hand")
+        self.right_hand_view.initialise(right_hand_objects)
+
 
         os.environ["SDL_VIDEO_CENTERED"] = "1"
         pygame.init()
@@ -91,6 +104,16 @@ class QMainFrame(View):
                       x=x,
                       y=y)
 
+        y = 400
+
+        if self.mode == QMainFrame.MODE_PLAYING:
+            self.left_hand_view.draw()
+            self.surface.blit(self.left_hand_view.surface, (0, y))
+            self.right_hand_view.draw()
+            rh_rect = self.right_hand_view.surface.get_rect()
+            rh_rect.right = pane_rect.right
+            rh_rect.top = y
+            self.surface.blit(self.right_hand_view.surface, rh_rect.topleft)
 
     def update(self):
         pygame.display.update()

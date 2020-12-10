@@ -1,21 +1,41 @@
 import random
 
-class QPlayer:
 
+class QPlayer:
     STATE_AWAKE = "awake"
     STATE_ASLEEP = "asleep"
     STATE_DEAD = "dead"
+    STATES = (STATE_AWAKE, STATE_ASLEEP)
 
     PROPERTY_HUNGER = "hunger"
     PROPERTY_TIREDNESS = "tiredness"
     PROPERTY_ENERGY = "energy"
     PROPERTY_HEALTH = "health"
 
+    STATE_TICKS_PER_CHANGE = {
+
+        STATE_AWAKE: {
+            PROPERTY_HUNGER: (1, 1),
+            PROPERTY_ENERGY: (1, -1),
+            PROPERTY_TIREDNESS: (1, 1)},
+
+        STATE_ASLEEP: {
+            PROPERTY_HUNGER: (1, 1),
+            PROPERTY_ENERGY: (1, 1),
+            PROPERTY_TIREDNESS: (1, -1)},
+
+        STATE_DEAD: {
+            PROPERTY_HUNGER: (1, 0),
+            PROPERTY_ENERGY: (1, 0),
+            PROPERTY_TIREDNESS: (1, 0)},
+    }
+
     PROPERTIES = (PROPERTY_HEALTH, PROPERTY_ENERGY, PROPERTY_ENERGY, PROPERTY_TIREDNESS)
 
-    def __init__(self, name:str):
+    def __init__(self, name: str):
         self.name = name
         self.state = QPlayer.STATE_AWAKE
+        self.ticks = 0
 
         self.properties = {}
 
@@ -30,22 +50,32 @@ class QPlayer:
         self.properties.update(new_properties)
 
     def get_property(self, property_name: str):
-        return self.properties.get(property_name)
+        return self.properties.get(property_name, 0)
 
-    def set_property(self, property_name: str, property_value, increment:bool = False):
+    def set_property(self, property_name: str, property_value, increment: bool = False):
 
         if increment is True:
             property_value += self.get_property(property_name)
 
-        property_value = max(0,min(100, property_value))
+        property_value = max(0, min(100, property_value))
         self.properties[property_name] = property_value
-
 
     def roll(self):
         new_properties = {}
         for property in QPlayer.PROPERTIES:
-            new_properties[property] = random.randint(50,100)
+            new_properties[property] = random.randint(50, 100)
 
         self.add_properties(new_properties)
 
+    def tick(self, increment: int = 1):
 
+        state_ticks = QPlayer.STATE_TICKS_PER_CHANGE.get(self.state)
+
+        for i in range(increment):
+
+            self.ticks += 1
+
+            for k, v in state_ticks.items():
+                ticks, delta = v
+                if self.ticks % ticks == 0:
+                    self.set_property(k, delta, increment=True)

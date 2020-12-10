@@ -24,3 +24,4 @@ Exercise Bike,Exercise Bike,icon.png,,Window,OFF,TRUE,FALSE,FALSE,FALSE
 Telephone,Telephone,icon.png,,Bedside Table,OFF,TRUE,FALSE,FALSE,FALSE
 Playstation 4,Playstation 4,icon.png,,TV Area,OFF,TRUE,FALSE,FALSE,FALSE
 Shelves,Shelves,icon.png,,Desk,OFF,FALSE,FALSE,TRUE,FALSE
+Room Key,Room Key,icon.png,,Right Hand,OFF,FALSE,TRUE,FALSE,TRUE

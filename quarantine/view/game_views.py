@@ -18,7 +18,7 @@ class LocationView(View):
         self.next_locations = []
         self.location_images = []
 
-        self.objects_view = ObjectsView(self.model, self.width, 100)
+        self.objects_view = ObjectsView("Visible Objects", self.width, 100)
 
 
     def initialise(self):
@@ -41,7 +41,8 @@ class LocationView(View):
         self.next_locations = sorted(list(self.model.current_location.linked_locations.values()), key=lambda k:k.name )
         self.set_next_location(0)
 
-        self.objects_view.initialise()
+        object_list = self.model.get_objects_at_location()
+        self.objects_view.initialise(object_list)
 
     def process_event(self, new_event: model.Event):
         self.objects_view.process_event(new_event)
@@ -143,23 +144,24 @@ class LocationView(View):
 
 class ObjectsView(View):
 
-    def __init__(self, model: model.QModel, width: int = 0, height=0):
+    def __init__(self, view_title:str ="Objects", width: int = 0, height=0):
 
         super().__init__()
 
         self.model = model
         self.width = width
         self.height = height
+        self.view_title = view_title.title()
 
         self.object_selection = 0
         self.objects = []
 
-    def initialise(self):
+    def initialise(self, object_list:list):
         super().initialise()
 
         self.surface = pygame.Surface((self.width, self.height))
 
-        self.objects = self.model.get_objects_at_location()
+        self.objects = object_list
         self.set_selected_object(0)
 
     def set_selected_object(self, new_object_id: int, increment: bool = False):
@@ -187,7 +189,7 @@ class ObjectsView(View):
         y = 18
 
         draw_text(self.surface,
-                  msg="Objects",
+                  msg=self.view_title,
                   size=30,
                   x=x,
                   y=y)
