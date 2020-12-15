@@ -5,11 +5,13 @@ from pathlib import Path
 class QObject():
     def __init__(self, name:str):
         self.name = name
+        self.description = name
         self.properties = {}
         self.contents = []
 
     def add_properties(self, new_properties: dict):
         self.properties.update(new_properties)
+        self.description = self.get_property("Description")
 
     def get_property(self, property_name : str):
         return self.properties.get(property_name)

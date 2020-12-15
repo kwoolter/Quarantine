@@ -28,13 +28,14 @@ class QModel:
         self.player = None
         self.events = EventQueue()
         self.current_location = None
-        self.puzzles = QGamePuzzleManager()
+        self.puzzles = None
 
         self.state = QModel.STATE_LOADED
 
     def print(self):
         print(f"Game:{self.name}")
         print(f"Player:{self.player}")
+        self.puzzles.print()
 
     def initialise(self):
         self.state = QModel.STATE_READY
@@ -43,19 +44,18 @@ class QModel:
         # Initialise components
         self.player = QPlayer("Me")
         self.player.roll()
-        print(f"{self.player}")
 
         QLocationFactory.load("locations.csv")
         QObjectFactory.load("objects.csv")
         QMapFactory.load("map.csv")
+        self.puzzles = QGamePuzzleManager(self.player)
 
-        start_location = "Pantry"
-        start_location = "Main Room"
+        start_location = "Doorway"
 
         self.current_location = QLocationFactory.get_object_by_name(start_location)
 
         self.events.add_event(Event(type=Event.GAME,
-                                    name=Event.ACTION_SUCCEEDED,
+                                    name=Event.STATE_LOADED,
                                     description=f"Welcome {self.player.name} to {self.name}"))
 
     def pause(self):
@@ -67,16 +67,18 @@ class QModel:
     def end(self):
         self.state = QModel.STATE_GAME_OVER
 
-    def tick(self):
+    def tick(self, increment:int = 1):
 
         if self.state == QModel.STATE_PLAYING:
 
-            self.timer.tick()
-            self.player.tick()
+            for i in range(increment):
+                self.timer.tick()
+                self.player.tick()
+                self.perform_action("Game", "TICK")
 
             self.events.add_event(Event(type=Event.GAME,
                                         name=Event.TICK,
-                                        description=f"Game model ticked: Day {self.timer.day:02} {self.timer.hour:02}:{self.timer.minutes:02} state({self.state})"))
+                                        description=f"Game model ticked by {increment}: Day {self.timer.day:02} {self.timer.hour:02}:{self.timer.minutes:02} state({self.state})"))
 
     @property
     def state(self):
@@ -104,6 +106,26 @@ class QModel:
     def process_event(self, new_event):
         print("Default Game event process:{0}".format(new_event))
 
+    def get_light_at_location(self, location_name:str = None):
+
+        if location_name is None:
+            location = self.current_location
+        else:
+            location = QLocationFactory.get_object_by_name(location_name)
+
+        alpha = 255
+
+        is_light = location.get_property("IsLight")
+        hour = self.timer.hour
+
+        if is_light is False:
+            alpha = int(255 * (1 - abs(1 - (hour/12))))
+
+        alpha = max(min(alpha, 255),10)
+
+        #print(f"{location.name}:light={is_light}, time={hour}, alpha = {alpha}")
+
+        return alpha
 
     def get_objects_at_location(self, location_name:str = None):
         if location_name is None:
@@ -116,17 +138,20 @@ class QModel:
         inputs = {}
 
         inputs[QPuzzle.INPUT_LOCATION] = self.current_location.name
-        inputs[QPuzzle.INPUT_TIME] = str(self.timer)
-        inputs[QPuzzle.INPUT_PLATER_STATE] = self.player.state
+        inputs[QPuzzle.INPUT_HOUR] = self.timer.hour
+        inputs[QPuzzle.INPUT_DAY] = self.timer.day
+        inputs[QPuzzle.INPUT_PLAYER_STATE] = self.player.state
         inputs[QPuzzle.INPUT_OBJECT] = obj
         inputs[QPuzzle.INPUT_ACTION] = action
 
         success = self.puzzles.evaluate_puzzles(inputs)
 
         if success is False:
-            self.events.add_event(Event(type=Event.GAME,
-                                        name=Event.ACTION_FAILED,
-                                        description=f"Nothing happens when you {action} {obj}"))
+            for puzzle, output in self.puzzles.errors.items():
+                print(f"{puzzle}:{output}")
+            # self.events.add_event(Event(type=Event.GAME,
+            #                             name=Event.ACTION_FAILED,
+            #                             description=f"Nothing happens when you {action} {obj}"))
         else:
             for puzzle, output in self.puzzles.outputs.items():
                 print(f"{puzzle}:{output}")
@@ -135,7 +160,8 @@ class QModel:
                         self.player.set_property(k, v, increment=True)
 
                     elif k == QPuzzle.OUTPUT_TIME_DELTA:
-                        self.timer.tick(v)
+                        self.tick(v)
+                        #self.timer.tick(v)
 
                     elif k == QPuzzle.OUTPUT_OBJECT:
                         object_property = output.get(QPuzzle.OUTPUT_OBJECT_PROPERTY)

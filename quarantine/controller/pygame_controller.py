@@ -121,17 +121,21 @@ class QController:
             object_action = action.get("action")
             debug = action.get("debug")
             new_mode = action.get("new mode")
+            view_action = action.get("view action")
 
 
             if select:
                 new_loc = self.view.location_view.get_selected_new_location()
                 self.model.current_location = new_loc
                 self.view.location_view.initialise()
+
             elif object_action:
 
                 obj = None
 
                 if object_action == "USE":
+                    obj = self.view.location_view.get_selected_object()
+                elif object_action == "OPEN":
                     obj = self.view.location_view.get_selected_object()
                 elif object_action == "USE LEFT":
                     objs = self.model.get_objects_at_location("Left Hand")
@@ -144,8 +148,29 @@ class QController:
                         obj = objs[0]
                         object_action = "USE"
 
+                elif object_action == "DROP RIGHT":
+                    objs = self.model.get_objects_at_location("Right Hand")
+                    if len(objs) >= 1:
+                        obj = objs[0]
+                        object_action = "DROP"
+
+                elif object_action == "DROP LEFT":
+                    objs = self.model.get_objects_at_location("Left Hand")
+                    if len(objs) >= 1:
+                        obj = objs[0]
+                        object_action = "DROP"
+
+                elif object_action in ("TAKE", "TAKE LEFT", "TAKE RIGHT"):
+                    obj = self.view.location_view.get_selected_object()
+
                 if obj is not None:
                     self.model.perform_action(obj.name, object_action)
+
+            elif view_action:
+                if view_action == "OPEN":
+                    self.view.set_mode(view.QMainFrame.MODE_OBJECT_CONTENTS)
+                elif view_action == "CLOSE":
+                    self.view.set_mode(view.QMainFrame.MODE_VISIBLE_OBJECTS)
 
             elif pause:
                 self.set_mode(QController.GAME_MODE_PAUSED)
@@ -203,6 +228,20 @@ class QController:
                 action = {"action":"USE LEFT"}
             elif new_event.key == K_RSHIFT:
                 action = {"action":"USE RIGHT"}
+            elif new_event.key == K_o:
+                action = {"view action":"OPEN"}
+            elif new_event.key == K_p:
+                action = {"view action":"CLOSE"}
+            elif new_event.key == K_t:
+                action = {"action":"TAKE"}
+            elif new_event.key == K_QUOTE:
+                action = {"action":"TAKE RIGHT"}
+            elif new_event.key == K_a:
+                action = {"action":"TAKE LEFT"}
+            elif new_event.key == K_SLASH:
+                action = {"action":"DROP RIGHT"}
+            elif new_event.key == K_z:
+                action = {"action":"DROP LEFT"}
             elif new_event.key == K_RETURN:
                 action = {"select":True}
             elif new_event.key >= K_1 and new_event.key <= K_9:

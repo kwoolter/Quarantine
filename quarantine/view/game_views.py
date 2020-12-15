@@ -4,6 +4,9 @@ from .graphics import *
 
 class LocationView(View):
 
+    MODE_VISIBLE_OBJECT = "visible objects"
+    MODE_OBJECT_CONTENTS = "object contents"
+
     def __init__(self, model: model.QModel, width:int =0, height=0):
 
         super().__init__()
@@ -12,6 +15,7 @@ class LocationView(View):
         self.model = model
         self.width = width
         self.height = height
+        self.mode = LocationView.MODE_VISIBLE_OBJECT
 
         # Components
         self.next_location_selection = 0
@@ -19,6 +23,7 @@ class LocationView(View):
         self.location_images = []
 
         self.objects_view = ObjectsView("Visible Objects", self.width, 100)
+        self.object_contents_view = ObjectsView("Object Contents", self.width, 100)
 
 
     def initialise(self):
@@ -45,7 +50,11 @@ class LocationView(View):
         self.objects_view.initialise(object_list)
 
     def process_event(self, new_event: model.Event):
-        self.objects_view.process_event(new_event)
+
+        if new_event.name == model.Event.GAME_MODEL_CHANGED:
+            object_list = self.model.get_objects_at_location()
+            self.objects_view.initialise(object_list)
+
 
     def set_location_image(self, image_number : int, increment : bool = False, wrap: bool = True):
 
@@ -76,16 +85,36 @@ class LocationView(View):
         return self.next_locations[self.next_location_selection]
 
     def set_selected_object(self, new_object_id: int, increment: bool = False):
-        self.objects_view.set_selected_object(new_object_id, increment)
+        if self.mode == LocationView.MODE_VISIBLE_OBJECT:
+            self.objects_view.set_selected_object(new_object_id, increment)
+        elif self.mode == LocationView.MODE_OBJECT_CONTENTS:
+            self.object_contents_view.set_selected_object(new_object_id, increment)
 
     def get_selected_object(self):
-        return self.objects_view.get_selected_object()
+        if self.mode == LocationView.MODE_VISIBLE_OBJECT:
+            return self.objects_view.get_selected_object()
+        elif self.mode == LocationView.MODE_OBJECT_CONTENTS:
+            return self.object_contents_view.get_selected_object()
+
+    def set_mode(self, new_mode : str):
+
+        if new_mode == LocationView.MODE_OBJECT_CONTENTS:
+            obj = self.get_selected_object()
+            if obj is not None and obj.get_property("IsContainer") is True:
+                self.mode = new_mode
+                self.object_contents_view.initialise(self.model.get_objects_at_location(obj.name))
+        else:
+            self.mode = new_mode
+
 
     def draw(self):
-        self.surface.fill(Colours.BLUE)
+        self.surface.fill(Colours.BLACK)
         pane_rect = self.surface.get_rect()
 
         photo_img = self.location_images[self.location_image_selection]
+
+        alpha = self.model.get_light_at_location()
+        photo_img.set_alpha(alpha)
 
         self.surface.blit(photo_img, (0, 0))
         self.surface.blit(self.icon_img, (4,4))
@@ -138,8 +167,12 @@ class LocationView(View):
 
             x+= icon_size + 10
 
-        self.objects_view.draw()
-        self.surface.blit(self.objects_view.surface, (0, pane_rect.bottom - 200))
+        if self.mode == LocationView.MODE_VISIBLE_OBJECT:
+            self.objects_view.draw()
+            self.surface.blit(self.objects_view.surface, (0, pane_rect.bottom - 200))
+        elif self.mode == LocationView.MODE_OBJECT_CONTENTS:
+            self.object_contents_view.draw()
+            self.surface.blit(self.object_contents_view.surface, (0, pane_rect.bottom - 200))
 
 
 class ObjectsView(View):
@@ -175,8 +208,7 @@ class ObjectsView(View):
 
     def process_event(self, new_event: model.Event):
         if new_event.name == model.Event.GAME_MODEL_CHANGED:
-            self.initialise()
-
+            pass
 
     def get_selected_object(self):
         return self.objects[self.object_selection]
@@ -212,15 +244,28 @@ class ObjectsView(View):
             if i == self.object_selection:
                 pygame.draw.rect(self.surface, Colours.RED, icon_rect, 4)
 
+            if o.get_property("IsContainer") is True:
+
+                contents = model.QObjectFactory.get_objects_by_location(o.name)
+
+                draw_text(self.surface,
+                          msg=f"+{len(contents)}",
+                          x=icon_rect.x+4,
+                          y=icon_rect.y+8,
+                          bg_colour=Colours.WHITE,
+                          fg_colour=Colours.BLUE,
+                          size=32, centre=False)
+
+
             draw_text(self.surface,
-                      msg=f"{i + 1}){o.name}",
+                      msg=f"{i + 1}){o.description}",
                       x=icon_rect.centerx,
                       y=icon_rect.bottom + 10,
                       bg_colour=Colours.WHITE,
                       fg_colour=Colours.BLUE,
                       size=text_size)
 
-            x += icon_size + 10
+            x += icon_size + 20
 
 class PlayerView(View):
 
@@ -246,22 +291,22 @@ class PlayerView(View):
         pane_rect = self.surface.get_rect()
 
         x = pane_rect.centerx
-        y = 18
+        y = 10
 
         draw_text(self.surface,
                   msg=f"Player {self.model.name}",
-                  size=30,
+                  size=20,
                   x=x,
                   y=y)
 
         x = pane_rect.centerx
-        y+= 30
+        y+= 20
 
         for property, val in self.model.properties.items():
             draw_text(self.surface,
-                      msg=f"{property} : {val}",
-                      size=24,
+                      msg=f"{property.title()} : {val}%",
+                      size=16,
                       x=x,
                       y=y)
-            y+=20
+            y+=16
 

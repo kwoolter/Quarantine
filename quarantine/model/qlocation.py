@@ -17,6 +17,9 @@ class QLocation():
     def get_property(self, property_name : str):
         return self.properties.get(property_name)
 
+    def set_property(self, property_name:str, property_value):
+        self.properties[property_name] = property_value
+
     def __str__(self):
         text =f'{self.name}:'
         for k,v in self.properties.items():

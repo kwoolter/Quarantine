@@ -5,8 +5,6 @@ from .game_views import *
 from .graphics import *
 import logging
 
-
-
 class QMainFrame(View):
 
     MODE_READY = "ready"
@@ -14,6 +12,10 @@ class QMainFrame(View):
     MODE_PLAYER = "player"
     MODE_PAUSED = "game paused"
     MODE_GAME_OVER = "game over"
+
+    MODE_VISIBLE_OBJECTS = "visible objects"
+    MODE_OBJECT_CONTENTS = "object contents"
+    VIEW_OPTIONS = (MODE_VISIBLE_OBJECTS, MODE_OBJECT_CONTENTS)
 
     RESOURCES_DIR = os.path.dirname(__file__) + "\\resources\\"
 
@@ -25,17 +27,17 @@ class QMainFrame(View):
 
         super().__init__()
 
-        self._debug = False
-
+        # Properties
         self.model = model
         self.surface = None
         self.width = 800
         self.height = 800
+        self.mode = None
         self._debug = False
 
         # Components
         self.location_view = LocationView(model, width=self.width,height=self.height)
-        self.player_view = PlayerView(model.player, width=self.width,height=self.height)
+        self.player_view = PlayerView(model.player, width=100,height=100)
 
         inv_w, inv_h = QMainFrame.INVENTORY_SIZE
         self.left_hand_view = ObjectsView("Left Hand", width=inv_w, height=inv_h)
@@ -115,6 +117,11 @@ class QMainFrame(View):
             rh_rect.top = y
             self.surface.blit(self.right_hand_view.surface, rh_rect.topleft)
 
+            self.player_view.draw()
+            rect = self.player_view.surface.get_rect()
+            rect.topright = pane_rect.topright
+            self.surface.blit(self.player_view.surface, rect.topleft)
+
     def update(self):
         pygame.display.update()
 
@@ -128,6 +135,16 @@ class QMainFrame(View):
     def process_event(self, new_event: model.Event):
         self.location_view.process_event(new_event)
 
+        if new_event.name == model.Event.GAME_MODEL_CHANGED:
+            self.initialise()
+
     def set_mode(self, new_mode: str):
-        self.mode = new_mode
+
+        if new_mode in QMainFrame.VIEW_OPTIONS:
+            self.location_view.set_mode((new_mode))
+        else:
+            self.mode = new_mode
+
+    def set_option(self, new_option:str, option_value):
+        self.options[new_option] = option_value
 

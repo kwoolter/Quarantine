@@ -1,4 +1,7 @@
 Name,Description,Icon File,Image File,Location,State,IsInteractable,IsMovable,IsContainer,IsStorable
+Bathroom Light Switch,Bathroom Light Switch,icon.png,,Bathroom,OFF,TRUE,FALSE,FALSE,FALSE
+Bed Switch 1,Bed Switch 1,icon.png,,Bed,OFF,TRUE,FALSE,FALSE,FALSE
+Bed Switch 2,Bed Switch 2,icon.png,,Bed,OFF,TRUE,FALSE,FALSE,FALSE
 Bedside Table,Bedside Table,icon.png,,Bed,CLOSED,TRUE,FALSE,TRUE,FALSE
 Beer,Beer,beer_icon.png,,Fridge,FULL,TRUE,TRUE,FALSE,TRUE
 Coffee,Coffee,coffee_icon.png,,Pantry,FULL,TRUE,TRUE,FALSE,TRUE
@@ -6,22 +9,29 @@ Coffee Machine,Coffee Machine,coffee_machine_icon.png,,Pantry,OFF,TRUE,FALSE,TRU
 Crisps,Crisps,icon.png,,Pantry,FULL,TRUE,TRUE,FALSE,TRUE
 Curtains,Curtains,curtains_icon.png,,Window,OPEN,TRUE,FALSE,FALSE,FALSE
 Door,Door,door_icon.png,,Doorway,LOCKED,TRUE,FALSE,FALSE,FALSE
+Duvet,Duvet,icon.png,,Single Bed,NONE,FALSE,TRUE,FALSE,TRUE
+Exercise Bike,Exercise Bike,icon.png,,Window,OFF,TRUE,FALSE,FALSE,FALSE
 Fridge,Fridge,fridge_icon.png,,Pantry,CLOSED,TRUE,FALSE,TRUE,FALSE
+Game,Game,icon.png,,VOID,NONE,FALSE,FALSE,FALSE,FALSE
 Kettle,Kettle,kettle_icon.png,,Pantry,OFF,TRUE,TRUE,TRUE,FALSE
+Key Card Slot,Key Card Slot,icon.png,,Doorway,OFF,TRUE,FALSE,TRUE,FALSE
+Main Room Switch,Main Room Switch,icon.png,,Main Room,OFF,TRUE,FALSE,FALSE,FALSE
+Master Light Switch,Master Light Switch,icon.png,,Doorway,OFF,TRUE,FALSE,FALSE,FALSE
 Milk Carton,Milk Carton,milk_icon.png,,Fridge,CLOSED,TRUE,TRUE,FALSE,TRUE
 Nuts,Nuts,icon.png,,Pantry,FULL,TRUE,TRUE,FALSE,TRUE
-Pillow,Pillow,icon.png,,Single Bed,NONE,TRUE,TRUE,FALSE,FALSE
+Pants,Pants,icon.png,,Wardrobe,NONE,TRUE,TRUE,FALSE,TRUE
+Pillow,Pillow,icon.png,,Single Bed,NONE,FALSE,TRUE,FALSE,TRUE
+Playstation 4,Playstation 4,icon.png,,TV Area,OFF,TRUE,FALSE,FALSE,FALSE
 Red Wine,Red Wine,red_wine_icon.png,,Pantry,FULL,TRUE,TRUE,FALSE,TRUE
-Shampoo,Shampoo,shampoo_icon.png,,Shower,FULL,TRUE,TRUE,TRUE,TRUE
+Room Key,Room Key,icon.png,,Right Hand,OFF,FALSE,TRUE,FALSE,TRUE
+Shampoo,Shampoo,shampoo_icon.png,,Shower,FULL,TRUE,TRUE,FALSE,TRUE
+Shelves,Shelves,icon.png,,Desk,OFF,FALSE,FALSE,TRUE,FALSE
+Shorts,Shorts,icon.png,,Wardrobe,NONE,TRUE,TRUE,FALSE,TRUE
 Single Bed,Single Bed,bed_icon.png,,Bed,CLOSED,TRUE,FALSE,TRUE,FALSE
 Sink,Sink,bathroom_sink_icon.png,,Bathroom,OFF,TRUE,FALSE,FALSE,FALSE
 Soap,Soap,soap_icon.png,,Sink,NONE,TRUE,TRUE,FALSE,FALSE
+Telephone,Telephone,icon.png,,Bedside Table,OFF,TRUE,FALSE,FALSE,FALSE
 Toilet,Toilet,toilet_icon.png,,Bathroom,OFF,TRUE,FALSE,FALSE,FALSE
 T-shirt,T-shirt,icon.png,,Wardrobe,NONE,TRUE,TRUE,FALSE,TRUE
 TV,TV,tv_icon.png,,TV Area,OFF,TRUE,FALSE,FALSE,FALSE
 Wardrobe,Wardrobe,icon.png,wardrobe_photo.jpg,Main Room,CLOSED,TRUE,FALSE,TRUE,FALSE
-Exercise Bike,Exercise Bike,icon.png,,Window,OFF,TRUE,FALSE,FALSE,FALSE
-Telephone,Telephone,icon.png,,Bedside Table,OFF,TRUE,FALSE,FALSE,FALSE
-Playstation 4,Playstation 4,icon.png,,TV Area,OFF,TRUE,FALSE,FALSE,FALSE
-Shelves,Shelves,icon.png,,Desk,OFF,FALSE,FALSE,TRUE,FALSE
-Room Key,Room Key,icon.png,,Right Hand,OFF,FALSE,TRUE,FALSE,TRUE
