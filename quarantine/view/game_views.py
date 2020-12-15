@@ -15,6 +15,8 @@ class LocationView(View):
         self.model = model
         self.width = width
         self.height = height
+        self.bg_text = Colours.DARK_GREY
+        self.fg_text = Colours.WHITE
         self.mode = LocationView.MODE_VISIBLE_OBJECT
 
         # Components
@@ -22,8 +24,8 @@ class LocationView(View):
         self.next_locations = []
         self.location_images = []
 
-        self.objects_view = ObjectsView("Visible Objects", self.width, 100)
-        self.object_contents_view = ObjectsView("Object Contents", self.width, 100)
+        self.objects_view = ObjectsView("Visible Objects", self.width, 110)
+        self.object_contents_view = ObjectsView("Object Contents", self.width, 110)
 
 
     def initialise(self):
@@ -54,6 +56,7 @@ class LocationView(View):
         if new_event.name == model.Event.GAME_MODEL_CHANGED:
             object_list = self.model.get_objects_at_location()
             self.objects_view.initialise(object_list)
+            self.object_contents_view.initialise(object_list)
 
 
     def set_location_image(self, image_number : int, increment : bool = False, wrap: bool = True):
@@ -128,9 +131,11 @@ class LocationView(View):
                   msg=f"{location.name:^30}",
                   size=40,
                   x=x,
-                  y=y)
+                  y=y,
+                  fg_colour=self.fg_text,
+                  bg_colour=self.bg_text)
 
-        y+=30
+        y+=20
 
         msg=str(self.model.timer)
 
@@ -138,14 +143,29 @@ class LocationView(View):
                   msg=f"{msg:^30}",
                   size=16,
                   x=x,
-                  y=y)
+                  y=y,
+                  fg_colour=self.fg_text,
+                  bg_colour=self.bg_text)
 
-        x = 10
+        obj_view = None
+        if self.mode == LocationView.MODE_VISIBLE_OBJECT:
+            obj_view = self.objects_view
+        elif self.mode == LocationView.MODE_OBJECT_CONTENTS:
+            obj_view = self.object_contents_view
+
+        if obj_view is not None:
+            obj_view.draw()
+            obj_rect = obj_view.surface.get_rect()
+            obj_rect.bottom = pane_rect.bottom
+            self.surface.blit(obj_view.surface, obj_rect.topleft)
 
         icon_size = 64
         text_size = 16
+        padding = 20
 
-        y = pane_rect.bottom - icon_size - text_size - 16
+        y = obj_rect.top - icon_size - text_size - 4
+
+        x = int(pane_rect.width + padding - len(self.next_locations) * (icon_size + text_size))/2
 
         for i, location in enumerate(self.next_locations):
             icon_file = location.get_property("Icon File")
@@ -159,20 +179,16 @@ class LocationView(View):
                 pygame.draw.rect(self.surface, Colours.RED, icon_rect, 4)
                 
             draw_text(self.surface,
-                      msg=f"{i+1}){location.name}",
+                      msg=f" {i+1}) {location.name} ",
                       x=icon_rect.centerx,
                       y=icon_rect.bottom + 10,
-                      bg_colour=Colours.BLUE,
+                      fg_colour=self.fg_text,
+                      bg_colour=self.bg_text,
                       size = text_size)
 
-            x+= icon_size + 10
+            x+= icon_size + padding
 
-        if self.mode == LocationView.MODE_VISIBLE_OBJECT:
-            self.objects_view.draw()
-            self.surface.blit(self.objects_view.surface, (0, pane_rect.bottom - 200))
-        elif self.mode == LocationView.MODE_OBJECT_CONTENTS:
-            self.object_contents_view.draw()
-            self.surface.blit(self.object_contents_view.surface, (0, pane_rect.bottom - 200))
+
 
 
 class ObjectsView(View):
@@ -185,6 +201,8 @@ class ObjectsView(View):
         self.width = width
         self.height = height
         self.view_title = view_title.title()
+        self.bg = Colours.DARK_GREY
+        self.fg = Colours.WHITE
 
         self.object_selection = 0
         self.objects = []
@@ -214,24 +232,28 @@ class ObjectsView(View):
         return self.objects[self.object_selection]
 
     def draw(self):
-        self.surface.fill(Colours.WHITE)
+        self.surface.fill(self.bg)
         pane_rect = self.surface.get_rect()
 
         x = pane_rect.centerx
-        y = 18
+        y = 12
 
         draw_text(self.surface,
                   msg=self.view_title,
-                  size=30,
+                  size=24,
                   x=x,
-                  y=y)
-
-        x = 10
+                  y=y,
+                  bg_colour=self.bg,
+                  fg_colour=self.fg
+                  )
 
         icon_size = 64
         text_size = 16
+        padding = 20
 
-        y = pane_rect.bottom - icon_size - text_size - 16
+        x = int((pane_rect.width + padding - len(self.objects) * (icon_size + padding))/2)
+
+        y = pane_rect.bottom - icon_size - text_size - 2
 
         for i, o in enumerate(self.objects):
             icon_file = o.get_property("Icon File")
@@ -250,22 +272,23 @@ class ObjectsView(View):
 
                 draw_text(self.surface,
                           msg=f"+{len(contents)}",
-                          x=icon_rect.x+4,
-                          y=icon_rect.y+8,
-                          bg_colour=Colours.WHITE,
-                          fg_colour=Colours.BLUE,
-                          size=32, centre=False)
+                          x=icon_rect.x,
+                          y=icon_rect.y + 10,
+                          bg_colour=self.bg,
+                          fg_colour=self.fg,
+                          size=30,
+                          centre=False)
 
 
             draw_text(self.surface,
                       msg=f"{i + 1}){o.description}",
                       x=icon_rect.centerx,
                       y=icon_rect.bottom + 10,
-                      bg_colour=Colours.WHITE,
-                      fg_colour=Colours.BLUE,
+                      bg_colour=self.bg,
+                      fg_colour=self.fg,
                       size=text_size)
 
-            x += icon_size + 20
+            x += icon_size + padding
 
 class PlayerView(View):
 

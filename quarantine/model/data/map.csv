@@ -1,5 +1,5 @@
 Location,VisibleLocations
-Doorway,Main Room
+Doorway,"Main Room, Corridor"
 Bathroom,"Shower,Main Room"
 Main Room,"Doorway,Bathroom,Window,Desk, Bed, Pantry"
 Window,Main Room

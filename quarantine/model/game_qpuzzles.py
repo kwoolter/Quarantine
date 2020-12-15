@@ -46,19 +46,23 @@ class QGamePuzzleManager(QPuzzleManager):
         if action in ("TAKE", "TAKE LEFT", "TAKE RIGHT"):
             if obj.get_property("IsMovable") is True:
                 is_taken = False
+
                 if action in ("TAKE", "TAKE RIGHT"):
                     hand = "Right Hand"
                     right_obj = QObjectFactory.get_objects_by_location(hand)
                     if len(right_obj) == 0:
                         obj.set_property("Location", hand)
-                        overall_success = True
                         is_taken = True
+
                 if action == "TAKE LEFT" or is_taken is False:
                     hand = "Left Hand"
                     right_obj = QObjectFactory.get_objects_by_location(hand)
                     if len(right_obj) == 0:
                         obj.set_property("Location", hand)
-                        overall_success = True
+                        is_taken = True
+
+                overall_success = is_taken
+
             else:
                 self.errors[action] = f"You can't take {o.title()}"
 

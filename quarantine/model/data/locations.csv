@@ -7,7 +7,7 @@ Bed,Bed,bed_icon.png,beds_photo1.jpg,FALSE
 Desk,Desk,desk_icon.png,desk_photo.jpg,FALSE
 Shower,Shower,shower_icon.png,shower_photo.jpg,FALSE
 Desk Chair,Desk Chair,chair_icon.png,desk_photo.jpg,FALSE
-Corridor,Corridor,icon.png,photo1.png,TRUE
+Corridor,Corridor,icon.png,corridor_photo.jpg,TRUE
 Pantry,Pantry,pantry_icon.png,pantry_photo.jpg,FALSE
 Left Hand,Left Hand,left_hand_icon.png,left_hand_photo.png,TRUE
 Right Hand,Right Hand,right_hand_icon.png,right_hand_photo.png,TRUE

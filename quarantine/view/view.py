@@ -21,7 +21,7 @@ class QMainFrame(View):
 
     TRANSPARENT = (0, 255, 0)
 
-    INVENTORY_SIZE = (140,140)
+    INVENTORY_SIZE = (120,110)
 
     def __init__(self, model: model.QModel):
 
@@ -106,7 +106,7 @@ class QMainFrame(View):
                       x=x,
                       y=y)
 
-        y = 400
+        y = pane_rect.height - 110
 
         if self.mode == QMainFrame.MODE_PLAYING:
             self.left_hand_view.draw()
