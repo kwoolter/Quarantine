@@ -29,6 +29,7 @@ class QPuzzle:
     OUTPUT_OBJECT_PROPERTY_VALUE = "OUTPUT OBJECT PROPERTY VALUE"
 
     OUTPUT_TIME_DELTA = "OUTPUT TIME DELTA"
+    OUTPUT_PLAYER_STATE = "OUTPUT PLAYER STATE"
 
     def __init__(self, name:str):
         self.name = name

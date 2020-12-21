@@ -66,6 +66,14 @@ class QGamePuzzleManager(QPuzzleManager):
             else:
                 self.errors[action] = f"You can't take {o.title()}"
 
+        puzzle_name = "Time is Up!"
+        if day >=1:
+            outputs = {
+                QPuzzle.OUTPUT_PLAYER_STATE: QPlayer.STATE_DEAD
+            }
+            overall_success = True
+            self.outputs[puzzle_name] = outputs
+
 
         puzzle_name = "Power On"
         if is_power_on is False and o == "Room Key" and loc == "Doorway" and action == QPuzzle.ACTION_USE:
@@ -86,10 +94,20 @@ class QGamePuzzleManager(QPuzzleManager):
             overall_success = True
             self.outputs[puzzle_name] = outputs
 
+        puzzle_name = "Busted"
+        if loc == "Corridor" and (day > 0 or hour > 0):
+
+            outputs = {
+                QPuzzle.OUTPUT_PLAYER_STATE: QPlayer.STATE_DEAD
+            }
+            overall_success = True
+            self.outputs[puzzle_name] = outputs
+
+
         puzzle_name = "Sleep"
         count = self.get_day_puzzle_count(puzzle_name=puzzle_name, day=day)
         if o == "Single Bed" and action == QPuzzle.ACTION_USE:
-            if count == 0:
+            if count > 1:
                 outputs = {QPlayer.PROPERTY_TIREDNESS: -80, QPlayer.PROPERTY_ENERGY: 50,
                            QPuzzle.OUTPUT_TIME_DELTA: (60 * 6),
                            }

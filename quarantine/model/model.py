@@ -51,6 +51,7 @@ class QModel:
         self.puzzles = QGamePuzzleManager(self.player)
 
         start_location = "Doorway"
+        start_location = "Corridor"
 
         self.current_location = QLocationFactory.get_object_by_name(start_location)
 
@@ -79,6 +80,12 @@ class QModel:
             self.events.add_event(Event(type=Event.GAME,
                                         name=Event.TICK,
                                         description=f"Game model ticked by {increment}: Day {self.timer.day:02} {self.timer.hour:02}:{self.timer.minutes:02} state({self.state})"))
+
+            if self.player.state == QPlayer.STATE_DEAD:
+                self.events.add_event(Event(type=Event.GAME,
+                                            name=Event.ACTION_FAILED,
+                                            description=f"You died!"))
+                self.set_mode(QModel.STATE_GAME_OVER)
 
     @property
     def state(self):
@@ -158,7 +165,8 @@ class QModel:
                 for k,v in output.items():
                     if k in QPlayer.PROPERTIES:
                         self.player.set_property(k, v, increment=True)
-
+                    elif k == QPuzzle.OUTPUT_PLAYER_STATE:
+                        self.player.state = v
                     elif k == QPuzzle.OUTPUT_TIME_DELTA:
                         self.tick(v)
                         #self.timer.tick(v)

@@ -229,7 +229,10 @@ class ObjectsView(View):
             pass
 
     def get_selected_object(self):
-        return self.objects[self.object_selection]
+        if len(self.objects) == 0:
+            return None
+        else:
+            return self.objects[self.object_selection]
 
     def draw(self):
         self.surface.fill(self.bg)
